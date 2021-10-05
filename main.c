@@ -23,16 +23,16 @@ char *my_revstr(char *str)
     return (str);
 }
 
-char *int_to_bin(int nbr)
+char *int_to_bin(arg_t *arg)
 {
     char *tab = malloc(sizeof(char) * 9);
     char *stock = malloc(sizeof(char) * 9);
     int i = 0;
     int a = 0;
 
-    for (i = 0; nbr > 0; i++) {
-        tab[i] = nbr % 2 + 48;
-        nbr = nbr / 2;
+    for (i = 0; arg->rule > 0; i++) {
+        tab[i] = arg->rule % 2 + 48;
+        arg->rule = arg->rule / 2;
     }
     tab[i] = '\0';
     tab = my_revstr(tab);
@@ -53,25 +53,25 @@ void set_arg(arg_t *arg, char **av)
     arg->line = atoi(av[2]);
 }
 
-void my_free(char **tab, int lines, arg_t *arg, char *stock)
+void my_free(char **tab, arg_t *arg, char *stock)
 {
-    for (int i = 0; i < lines; i++)
+    for (int i = 0; i < arg->line; i++)
         free(tab[i]);
     free(tab);
     free(arg);
     free(stock);
 }
 
-char **set_tab(char **tab, int lines)
+char **set_tab(char **tab, arg_t *arg)
 {
-    tab = malloc(sizeof(char *) * (lines + 1));
+    tab = malloc(sizeof(char *) * (arg->line + 1));
     if (tab == NULL)
         return NULL;
-    for (int i = 0; i < lines; i++) {
+    for (int i = 0; i < arg->line; i++) {
         tab[i] = malloc(sizeof(char) * (80 + 1));
         tab[i][80] = '\0';
     }
-    tab[lines] = NULL;
+    tab[arg->line] = NULL;
     return tab;
 }
 
@@ -86,9 +86,9 @@ int main(int ac, char **av)
         return 0;
     }
     set_arg(arg, av);
-    tab = set_tab(tab, atoi(av[2]));
-    stock = int_to_bin(atoi(av[1]));
+    tab = set_tab(tab, arg);
+    stock = int_to_bin(arg);
     printf("%s\n", stock);
-    my_free(tab, atoi(av[2]), arg, stock);
+    my_free(tab, arg, stock);
     return (0);
 }
