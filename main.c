@@ -69,10 +69,20 @@ char **set_tab(char **tab, arg_t *arg)
         return NULL;
     for (int i = 0; i < arg->line; i++) {
         tab[i] = malloc(sizeof(char) * (80 + 1));
-        tab[i][80] = '\0';
+        if (tab[i] == NULL)
+            return NULL;
+        for (int j = 0; j < 80; j++)
+            tab[i][j] = '*';
+        tab[i][80] = '\n';
     }
     tab[arg->line] = NULL;
     return tab;
+}
+
+void print_tab(char **tab, arg_t *arg)
+{
+    for (int i = 0; i < arg->line; i++)
+        printf("%s", tab[i]);
 }
 
 int main(int ac, char **av)
@@ -89,6 +99,7 @@ int main(int ac, char **av)
     tab = set_tab(tab, arg);
     stock = int_to_bin(arg);
     printf("%s\n", stock);
+    print_tab(tab, arg);
     my_free(tab, arg, stock);
     return (0);
 }
