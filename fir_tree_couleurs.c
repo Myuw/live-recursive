@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>
+#include <time.h>
+#include <unistd.h>
 
 int error_gestion(int ac, char **av)
 {
@@ -38,16 +40,6 @@ int countLine(int size)
     }
 
     return last_col;
-}
-
-int compteSpace(int size, int turn, int loop)
-{
-    int i = 3;
-    int o = 0;
-
-    for (int i = 0; i != size; i++)
-        o += 4 + i;
-    return (o-size*2+turn-3);
 }
 
 void printColors(char *str)
@@ -101,7 +93,7 @@ void trunk(int size, int turn)
 {
     if (size == turn)
         return;
-    for (int i = 0; i != size * 3; i++)
+    for (int i = 0; i < (countLine(size) / 2) - size + 1; i++)
         printw(" ");
     init_pair(6, COLOR_YELLOW, COLOR_YELLOW);
     attron(COLOR_PAIR(6));
